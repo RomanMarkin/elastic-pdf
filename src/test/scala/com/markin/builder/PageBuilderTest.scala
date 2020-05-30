@@ -2,11 +2,10 @@ package com.markin.builder
 
 import java.util.UUID
 
+import com.markin.UnitSpec
 import com.markin.model.Page
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
 
-class PageBuilderTest extends AnyFlatSpec with Matchers {
+class PageBuilderTest extends UnitSpec {
 
   "the Page builder" should "build a valid page" in {
     val page = new PageBuilder[PageBuilder.EmptyPage]().

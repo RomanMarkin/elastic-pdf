@@ -15,6 +15,7 @@ trait ElasticSearchIndexComp {
     def index(document: T): Try[String]
     def bulkIndex(documents: Seq[T]): Try[String]
     def search(query: String): Seq[Try[T]]
+    def refresh: Try[String]
     def shutdown(): Unit
   }
 

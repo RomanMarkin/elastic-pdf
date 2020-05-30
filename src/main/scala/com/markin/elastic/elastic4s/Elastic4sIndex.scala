@@ -71,6 +71,16 @@ trait Elastic4sIndex[M] {
     }
   }
 
+  def refresh: Try[String] = {
+    val resp = client.execute {
+      refreshIndex(indexName)
+    }.await
+    mapElastic4sResponse(resp)
+  }
+
+  /** Closes the client. You can't reopen the client after shutdown. As soon as the client is a singleton in [[Elastic4sClientProvider]],
+   * you should only close it on application shutdown.
+   */
   def shutdown(): Unit = client.close()
 
   private def mapElastic4sResponse(response: com.sksamuel.elastic4s.Response[_]): Try[String] =

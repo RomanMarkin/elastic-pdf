@@ -1,10 +1,9 @@
 package com.markin.builder
 
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.flatspec.AnyFlatSpec
+import com.markin.UnitSpec
 import com.markin.model.Author
 
-class AuthorBuilderTest extends AnyFlatSpec with Matchers {
+class AuthorBuilderTest extends UnitSpec {
 
   "the Author builder" should "build a valid author" in {
     val author = new AuthorBuilder[AuthorBuilder.EmptyAuthor]().

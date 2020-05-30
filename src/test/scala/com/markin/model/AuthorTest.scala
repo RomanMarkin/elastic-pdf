@@ -2,10 +2,9 @@ package com.markin.model
 
 import java.util.UUID
 
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
+import com.markin.UnitSpec
 
-class AuthorTest extends AnyFlatSpec with Matchers {
+class AuthorTest extends UnitSpec {
 
   "the Author model" should "return valid full name" in {
     val author = Author(UUID.randomUUID(), Some("FirstName"), Some("MiddleName"), Some("LastName"))

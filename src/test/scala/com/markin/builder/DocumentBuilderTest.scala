@@ -2,11 +2,10 @@ package com.markin.builder
 
 import java.util.UUID
 
+import com.markin.UnitSpec
 import com.markin.model.{Document, Page}
-import org.scalatest.flatspec.AnyFlatSpec
-import org.scalatest.matchers.should.Matchers
 
-class DocumentBuilderTest extends AnyFlatSpec with Matchers {
+class DocumentBuilderTest extends UnitSpec {
 
   "the Document builder" should "build a valid empty document" in {
     val document = new DocumentBuilder[DocumentBuilder.EmptyDocument]().

@@ -5,6 +5,8 @@ import com.markin.ingest.FileFeederComp
 import com.markin.parser.DocumentParserComp
 import com.typesafe.scalalogging.Logger
 
+import scala.util.{Failure, Success}
+
 class DocumentHandler {
   this: DocumentParserComp
     with FileFeederComp
@@ -32,10 +34,10 @@ class DocumentHandler {
     pageIndex.bulkIndex(pages)
 
     val searchString = "мин"
-    pageIndex.search(searchString).fold[Unit] (
-      e => logger.error(s"Page search by $searchString failed: ${e.toString}"),
-      pages => pages.foreach(p => logger.debug(p.toString))
-    )
+    pageIndex.search(searchString).foreach {
+      case Success(page) => logger.debug(page.toString)
+      case Failure(e) => logger.error(s"Page search by $searchString failed: ${e.toString}")
+    }
 
     documentIndex.shutdown()
     pageIndex.shutdown()

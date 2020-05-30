@@ -62,11 +62,13 @@ trait Elastic4sIndex[M] {
     mapElastic4sResponse(resp)
   }
 
-  def search[D : HitReader : ClassTag](queryString: String)(implicit fromDTO: D => M): Try[Seq[M]] = {
-    val resp: Response[SearchResponse] = client.execute {
+  def search[D: HitReader : ClassTag](queryString: String)(implicit fromDTO: D => M): IndexedSeq[Try[M]] = {
+    client.execute {
       com.sksamuel.elastic4s.ElasticDsl.search(indexName).query(queryString)
-    }.await
-    Success(resp.result.to.map(fromDTO))
+    }.await.result.safeTo[D].map {
+      case Success(d) => Success(fromDTO(d))
+      case Failure(e) => Failure(e)
+    }
   }
 
   def shutdown(): Unit = client.close()

@@ -26,7 +26,7 @@ trait Elastic4sIndexCompImpl extends ElasticSearchIndexComp {
     override def bulkIndex(documents: Seq[Document]): Try[String] =
       super[Elastic4sIndex].bulkIndex(documents)
 
-    override def search(query: String): Try[Seq[Document]] =
+    override def search(query: String): Seq[Try[Document]] =
       super[Elastic4sIndex].search(query)
   }
 
@@ -43,7 +43,7 @@ trait Elastic4sIndexCompImpl extends ElasticSearchIndexComp {
     override def bulkIndex(pages: Seq[Page]): Try[String] =
       super[Elastic4sIndex].bulkIndex(pages)
 
-    override def search(query: String): Try[Seq[Page]] =
+    override def search(query: String): Seq[Try[Page]] =
       super[Elastic4sIndex].search(query)
   }
 }

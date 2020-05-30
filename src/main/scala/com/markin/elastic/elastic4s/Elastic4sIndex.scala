@@ -10,15 +10,18 @@ import com.sksamuel.elastic4s.requests.searches.SearchResponse
 import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 
-/** This trait keeps most of the implementation of trait @see ElasticSearchIndex declared in @see Elastic4sIndexCompImpl.
+/**
+ * This trait keeps most of the implementation of trait @see ElasticSearchIndex declared in @see Elastic4sIndexCompImpl.
  * It should be mixed in by other implementations of @see ElasticSearchIndex to make them using this implementation.
+ *
+ * @tparam M the type of the domain model object being mapped into DTO, so that DTO is saved in the Elasticsearch index.
  *
  * Read more about:
  * 1. Elastic4s Scala Client: https://index.scala-lang.org/sksamuel/elastic4s/elastic4s-play-json/5.2.4?target=_2.12
  * 2. Elastic4s Search DSL: https://github.com/sksamuel/elastic4s/blob/master/elastic4s-tests/src/test/scala/com/sksamuel/elastic4s/search/SearchDslTest.scala*
  * 3. How to parse JSON search results: https://elastic4s.readthedocs.io/en/stable/src/main/tut/docs/
  * */
-trait Elastic4sIndex[T] {
+trait Elastic4sIndex[M] {
   private val logger: Logger = Logger(this.getClass)
   private val client: ElasticClient = Elastic4sClientProvider.client
 
@@ -38,29 +41,32 @@ trait Elastic4sIndex[T] {
     mapElastic4sResponse(resp)
   }
 
-  def index(document: T)(implicit indexable: Indexable[T]): Try[String] = {
+  /**
+   * @tparam D the type of the DTO for the domain model object actually being kept in the Elasticsearch index.
+   * */
+  def index[D : Indexable](document: M)(implicit toDTO: M => D): Try[String] = {
     val resp = client.execute {
-      indexInto(indexName).doc(document).refresh(RefreshPolicy.Immediate)
+      indexInto(indexName).doc(toDTO(document)).refresh(RefreshPolicy.Immediate)
     }.await
     mapElastic4sResponse(resp)
   }
 
-  def bulkIndex(documents: Seq[T])(implicit indexable: Indexable[T]): Try[String] = {
+  def bulkIndex[D : Indexable](documents: Seq[M])(implicit toDTO: M => D): Try[String] = {
     val resp = client.execute {
       bulk(
         for {
           document <- documents
-        } yield indexInto(indexName).doc(document).refresh(RefreshPolicy.Immediate)
+        } yield indexInto(indexName).doc(toDTO(document)).refresh(RefreshPolicy.Immediate)
       )
     }.await
     mapElastic4sResponse(resp)
   }
 
-  def search(queryString: String)(implicit hitReader: HitReader[T], classTag: ClassTag[T]): Try[Seq[T]] = {
+  def search[D : HitReader : ClassTag](queryString: String)(implicit fromDTO: D => M): Try[Seq[M]] = {
     val resp: Response[SearchResponse] = client.execute {
       com.sksamuel.elastic4s.ElasticDsl.search(indexName).query(queryString)
     }.await
-    Success(resp.result.to)
+    Success(resp.result.to.map(fromDTO))
   }
 
   def shutdown(): Unit = client.close()

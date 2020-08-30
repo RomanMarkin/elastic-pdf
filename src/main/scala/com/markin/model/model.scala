@@ -1,14 +1,15 @@
 package com.markin.model
 
-import java.util.{Date, UUID}
+import java.time.LocalDate
+import java.util.UUID
 
 case class Document(uuid: UUID,
                     title: Option[String],
                     authors: Seq[String],
-                    keywords: Option[String],
+                    keywords: Option[String], //TODO make it Seq
                     fileUrl: Option[String],
                     titleImgUrl: Option[String],
-                    publishingDate: Option[Date],
+                    publishingDate: Option[LocalDate],
                     pages: Seq[Page])
 
 case class Page(uuid: UUID,

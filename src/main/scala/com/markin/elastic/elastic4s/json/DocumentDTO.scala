@@ -1,6 +1,7 @@
 package com.markin.elastic.elastic4s.json
 
-import java.util.{Date, UUID}
+import java.time.LocalDate
+import java.util.UUID
 
 import com.markin.model.Document
 import com.sksamuel.elastic4s.{HitReader, Indexable}
@@ -13,7 +14,7 @@ case class DocumentDTO(uuid: UUID,
                        keywords: Option[String],
                        fileUrl: Option[String],
                        titleImgUrl: Option[String],
-                       publishingDate: Option[Date])
+                       publishingDate: Option[LocalDate])
 
 object DocumentDTO extends DTO[Document, DocumentDTO]{
 
@@ -51,17 +52,15 @@ object DocumentDTO extends DTO[Document, DocumentDTO]{
   implicit val format: Format[DocumentDTO] = Json.format[DocumentDTO]
 
   /**
-   * Indexagble typeclasses
-   *
-   * @see https://github.com/sksamuel/elastic4s/#indexable-typeclass
+   * Indexagble typeclasses.
+   * [[https://github.com/sksamuel/elastic4s/#indexable-typeclass Read more]]
    * */
   implicit val indexable: Indexable[DocumentDTO] = playJsonIndexable[DocumentDTO]
 
 
   /**
-   * HitReader typeclasses
-   *
-   * @see https://github.com/sksamuel/elastic4s/#hitreader-typeclass
+   * HitReader typeclasses.
+   * [[https://github.com/sksamuel/elastic4s/#hitreader-typeclass Read more]]
    * */
   implicit val hitReader: HitReader[DocumentDTO] = playJsonHitReader[DocumentDTO]
 

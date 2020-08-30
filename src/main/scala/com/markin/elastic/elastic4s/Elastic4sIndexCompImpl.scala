@@ -10,6 +10,7 @@ trait Elastic4sIndexCompImpl extends ElasticSearchIndexComp {
 
   override val documentIndex: ElasticSearchIndex[Document] = new DocumentIndex(Config.envOrElseString("app.elastic.index.document"))
   override val pageIndex: ElasticSearchIndex[Page] = new PageIndex(Config.envOrElseString("app.elastic.index.page"))
+  override val documentIndexSearch: DocumentSearchAPI = new DocumentIndexSearch(Config.envOrElseString("app.elastic.index.document"))
 
   class DocumentIndex(name: String) extends ElasticSearchIndex[Document] with Elastic4sIndex[Document] {
 
@@ -35,5 +36,9 @@ trait Elastic4sIndexCompImpl extends ElasticSearchIndexComp {
     override def bulkIndex(pages: Seq[Page]): Try[String] = super[Elastic4sIndex].bulkIndex(pages)
 
     override def search(query: String): Seq[Try[Page]] = super[Elastic4sIndex].search(query)
+  }
+
+  class DocumentIndexSearch(name: String) extends DocumentSearchAPI with DocumentSearch {
+    override def indexName: String = name
   }
 }

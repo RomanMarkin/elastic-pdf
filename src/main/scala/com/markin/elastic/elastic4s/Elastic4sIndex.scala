@@ -11,15 +11,15 @@ import scala.reflect.ClassTag
 import scala.util.{Failure, Success, Try}
 
 /**
- * This trait keeps most of the implementation of trait @see ElasticSearchIndex declared in @see Elastic4sIndexCompImpl.
- * It should be mixed in by other implementations of @see ElasticSearchIndex to make them using this implementation.
+ * This trait keeps most of the implementation of trait [[com.markin.elastic.ElasticSearchIndexComp.ElasticSearchIndex]].
+ * It should be mixed in by other implementations of `ElasticSearchIndex` to make them using this implementation.
  *
  * @tparam M the type of the domain model object being mapped into DTO, so that DTO is saved in the Elasticsearch index.
  *
  * Read more about:
- * 1. Elastic4s Scala Client: https://index.scala-lang.org/sksamuel/elastic4s/elastic4s-play-json/5.2.4?target=_2.12
- * 2. Elastic4s Search DSL: https://github.com/sksamuel/elastic4s/blob/master/elastic4s-tests/src/test/scala/com/sksamuel/elastic4s/search/SearchDslTest.scala*
- * 3. How to parse JSON search results: https://elastic4s.readthedocs.io/en/stable/src/main/tut/docs/
+ * (1) [[https://index.scala-lang.org/sksamuel/elastic4s/elastic4s-play-json/5.2.4?target=_2.12 Elastic4s Scala Client]],
+ * (2) [[https://github.com/sksamuel/elastic4s/blob/master/elastic4s-tests/src/test/scala/com/sksamuel/elastic4s/search/SearchDslTest.scala Elastic4s Search DSL]],
+ * (3) [[https://elastic4s.readthedocs.io/en/stable/src/main/tut/docs/ How to parse JSON search results]].
  * */
 trait Elastic4sIndex[M] {
   private val logger: Logger = Logger(this.getClass)

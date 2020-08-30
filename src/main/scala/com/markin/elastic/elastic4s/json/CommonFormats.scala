@@ -1,19 +1,20 @@
 package com.markin.elastic.elastic4s.json
 
-import java.text.SimpleDateFormat
-import java.util.{Date, UUID}
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.UUID
 
 import play.api.libs.json._
 
 /**
- * Provides Play's Formats for read/write Scala objects from/to JSON.
+ * Provides Play's `Formats` for read/write Scala objects from/to JSON.
  * */
 object CommonFormats {
-  private val dateFormatter: SimpleDateFormat = new SimpleDateFormat("yyyy/MM/dd")
+  private val dateFormatter: DateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE
 
-  implicit val dateFormat: Format[Date] = new Format[Date] {
-    override def writes(d: Date): JsValue = JsString(dateFormatter.format(d))
-    override def reads(json: JsValue): JsResult[Date] = json.validate[String].map[Date](dString => dateFormatter.parse(dString))
+  implicit val dateFormat: Format[LocalDate] = new Format[LocalDate] {
+    override def writes(d: LocalDate): JsValue = JsString(d.format(dateFormatter))
+    override def reads(json: JsValue): JsResult[LocalDate] = json.validate[String].map[LocalDate](dString => LocalDate.parse(dString, dateFormatter))
   }
 
   implicit val uuidFormat: Format[UUID] = new Format[UUID] {

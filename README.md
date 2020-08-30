@@ -2,6 +2,11 @@
 1. ~~Add Unit Tests (on Model, on Parsers)~~
 2. ~~Apply Cake pattern to build components~~
 3. Add Search Component (How to search by pages and aggregate by documents)
+    - make keywords a sequence
+    - limit result set
+    - highlight result of the page
+    - fetch document for found page
+    - update document model (see document from Olga Gabzovska in Google Docs) 
 4. Add File Storage component with simple local filesystme implementation and using Mini.io (see Medium bookmark)
 5. Add Title page Image slicer component
 6. Add REST Ingestion component
